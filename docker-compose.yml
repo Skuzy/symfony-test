@@ -33,13 +33,11 @@ services:
     image: mysql:5.7
     container_name: "mysql"
     hostname: "docker_mysql"
-    env_file:
-      - ".env"
     environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=default
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=password
     ports:
       - "13306:3306"
     networks:

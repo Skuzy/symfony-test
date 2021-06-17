@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+    <style>
+        .navigation {
+            display: flex;
+            justify-content: center;
+        }
+        .error {
+            text-transform: capitalize;
+        }
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+    <div class="example-wrapper">
+
+        <div class="mb-4 row">
+            <p>Filters:</p>
+        <form id="filters">
+            <input class="form-check-input" type="hidden" name="search" value="{{ app.request.get('search') }}">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="filter" id="inlineRadio1" value="only_sale" {% if app.request.get('filter') == 'only_sale'%}checked{% endif %}>
+                <label class="form-check-label" for="inlineRadio1">Show products on sale</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="filter" id="inlineRadio2" value="no_sale" {% if app.request.get('filter') == 'no_sale'%}checked{% endif %}>
+                <label class="form-check-label" for="inlineRadio2">Show full price products</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="filter" id="inlineRadio3" value="all" {% if app.request.get('filter') == 'all' or app.request.get('filter') is empty%}checked{% endif %}>
+                <label class="form-check-label" for="inlineRadio3">Show all products</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        </div>
+        <div class="mb-3 row">
+        <table class="table table-striped table-dark products">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">SKU</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Sale price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in pagination %}
+            <tr>
+                <th scope="row">{{ product.id }}</th>
+                <td>{{ product.sku }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.salePrice }}</td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+    <script>
+        function getFormData($form) {
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+
+            $.map(unindexed_array, function (n, i) {
+                indexed_array[n['name']] = n['value'];
+            });
+
+            return indexed_array;
+        }
+
+        $(document).ready(function () {
+            $("#add-product").submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                console.log(getFormData(form))
+                $.ajax({
+                        type: 'POST',
+                        url: '/products',
+                        data: JSON.stringify(getFormData(form)),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        accept: 'application/json',
+                        success: function (response) {
+                            $('.products tbody').append('<tr><th scope="row">' + response.id + '</th> <td>' + response.sku + '</td> <td>' + response.name + '</td> <td>' + response.description + '</td> <td>' + response.price + '</td> <td>' + response.salePrice + '</td> </tr>');
+                            $('#add-product')[0].reset();
+                            $('#errors').html("")
+                            $('#errors').append('<div class="alert alert-success" role="alert">Product added successfully</div>')
+                        },
+                        error: function (response) {
+                            items = $.parseJSON(response.responseText)
+                            $('#errors').html("Errors:")
+                            for (const item in items) {
+                                console.log(items[item])
+                                $('#errors').append('<div class="alert alert-danger error" role="alert">' + item + ': ' + items[item] + '</div>')
+                            }
+                            $('.validation-error').html("All fields are required")
+                        }
+                    }
+                )
+            })
+        })
+    </script>
+{% endblock %}
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+
+        <h3>Add new product:</h3>
+        <div class="invalid-feedback">
+            Please choose a username.
+        </div>
+        <div id="errors">
+        </div>
+        <form id="add-product">
+            <div class="mb-3 row">
+                <label for="sku" class="col-sm-2 col-form-label">SKU</label>
+                <div class="col-sm-10">
+                    <input name="sku" type="text" class="form-control" id="sku" placeholder="3 capital + 4 numbers">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input name="name" type="text" class="form-control" id="name" placeholder="John Doe">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <textarea name="description" class="form-control" id="description" placeholder="Description"></textarea>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="name" class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                    <input name="price" type="number" step="0.01" class="form-control" id="name" placeholder="0.0">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="name" class="col-sm-2 col-form-label">Sale price</label>
+                <div class="col-sm-10">
+                    <input name="sale_price" type="number" step="0.01" class="form-control" id="name" placeholder="0.0">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+{% endblock %}

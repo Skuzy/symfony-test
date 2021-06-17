@@ -1,6 +1,6 @@
 # symfony-test
 
-To run this project please run create first `.env` file and copy contents from `.env.test` to `.env`
+To run this project please create first `.env` file and copy contents from `.env.test` to `.env`
 
 Then run commands:
 1. `docker-compose up --build`

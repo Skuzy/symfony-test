@@ -7,5 +7,3 @@ RUN apt-get update \
 
 COPY ./ /app
 WORKDIR /app
-
-RUN composer install

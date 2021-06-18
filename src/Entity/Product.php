@@ -43,12 +43,14 @@ class Product implements LocaleAwareInterface
      * @ORM\Column(type="float")
      * @Assert\Type("float")
      * @Assert\NotBlank()
+     * @Assert\GreaterThan(0)
      */
     private $price;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Assert\Type("float")
+     * @Assert\GreaterThan(0)
      * @Assert\LessThan(propertyPath="price")
      */
     private $sale_price;
